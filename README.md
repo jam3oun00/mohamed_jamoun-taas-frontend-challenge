@@ -44,7 +44,7 @@ Technologies used in this project as follows:
 - github API
 - SCSS
 
-### Technologies
+### challenges
 
 The only challenge I had in this project was the [CORS issue]() when trying to exchange code with access_token (https://github.com/login/oauth/access_token)
 The only solution I can think of is to use the backend, but I tried another temporary/simple solution that is [thingproxy](https://github.com/Freeboard/thingproxy)
