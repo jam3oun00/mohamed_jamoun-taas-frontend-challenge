@@ -13,10 +13,12 @@
       <li v-for="repo in reposFiltered" :key="repo.id">
         <a
           @click="selectRepo(repo)"
-          class="repo-item"
+          class="repo-item my-2 flex gap-2 align-center"
           :class="{ active: selected.id == repo.id }"
-          >{{ repo.name }}</a
         >
+          <img :src="repo.owner?.avatar_url" class="h-5 w-5 object-cover rounded-full" />
+          {{ repo.name }}
+        </a>
       </li>
     </ul>
   </div>
