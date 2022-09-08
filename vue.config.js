@@ -5,7 +5,7 @@ module.exports = defineConfig({
   configureWebpack: {
     plugins: [
       new Dotenv({
-        path: './.env.local',
+        path: './.env',
         safe: true
       })
     ]

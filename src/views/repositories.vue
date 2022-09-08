@@ -4,16 +4,42 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { Repo, User, Branch, Commit } from '@/types'
 
 export default defineComponent({
+  name: 'repositories',
   data() {
     return {
-      accessToken: ''
+      repos_url: '',
+      accessToken: '',
+      repos: [] as Repo[],
+      commits: [] as Commit[],
+      branches: [] as Branch[],
+      user: {} as User,
+      selectedRepo: {} as Repo,
+      selectedBranch: {} as Branch
+    }
+  },
+  computed: {
+    axiosHeaders(): object {
+      return {
+        headers: {
+          Authorization: `bearer ${this.accessToken}`
+        }
+      }
     }
   },
   methods: {
-    fetchUser() {
-      // will fetch user here
+    async fetchUser() {
+      const user = await this.axios.get('https://api.github.com/user', this.axiosHeaders)
+      this.user = user.data
+      this.repos_url = user.data.repos_url
+
+      this.fetchRepos()
+    },
+    async fetchRepos() {
+      const repos = await this.axios.get(this.repos_url, this.axiosHeaders)
+      this.repos = repos.data
     }
   },
   async created() {

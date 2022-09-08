@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-center w-screen h-screen">
     <div class="container flex items-center justify-center">
-      <button class="btn-primary" @click="startGithubAuth">Authorize my GitHub account</button>
+      <button class="btn bg-primary" @click="startGithubAuth">Authorize my GitHub account</button>
     </div>
   </div>
 </template>
