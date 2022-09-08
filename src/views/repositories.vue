@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div class="flex"></div>
 </template>
 
 <script lang="ts">
@@ -18,6 +18,12 @@ export default defineComponent({
       user: {} as User,
       selectedRepo: {} as Repo,
       selectedBranch: {} as Branch
+    }
+  },
+  // watch selectedBranch and fetch commits
+  watch: {
+    selectedBranch() {
+      this.fetchCommits()
     }
   },
   computed: {
@@ -40,6 +46,34 @@ export default defineComponent({
     async fetchRepos() {
       const repos = await this.axios.get(this.repos_url, this.axiosHeaders)
       this.repos = repos.data
+    },
+    async fetchBrabches(repo: Repo) {
+      this.selectedRepo = repo
+      try {
+        const branches = await this.axios.get(`${repo.url}/branches`, this.axiosHeaders)
+        this.branches = branches.data
+        this.selectedBranch = branches.data[0]
+
+        this.fetchCommits()
+      } catch (error: any) {
+        if (error.response.status === 409) {
+          this.branches = []
+        }
+        console.error(error)
+      }
+    },
+    async fetchCommits() {
+      try {
+        const commits = await this.axios.get(
+          `${this.selectedRepo.url}/commits?sha=${this.selectedBranch.name}`,
+          this.axiosHeaders
+        )
+        this.commits = commits.data
+      } catch (error: any) {
+        if (error.response.status === 409) {
+          this.commits = []
+        }
+      }
     }
   },
   async created() {
