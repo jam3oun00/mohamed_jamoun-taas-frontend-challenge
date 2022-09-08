@@ -2,13 +2,21 @@
   <div class="repo-container">
     <div>
       <div class="repo-title">Recent Repositories</div>
-      <input type="text" class="primary-field mt-3 mb-5" placeholder="Find a repository…" />
+      <input
+        type="text"
+        class="primary-field mt-3 mb-5"
+        v-model="search"
+        placeholder="Find a repository…"
+      />
     </div>
     <ul>
-      <li v-for="repo in repos" :key="repo.id">
-        <a @click="selectRepo(repo)" class="repo-item" :class="{ active: selected.id == repo.id }">
-          {{ repo.name }}
-        </a>
+      <li v-for="repo in reposFiltered" :key="repo.id">
+        <a
+          @click="selectRepo(repo)"
+          class="repo-item"
+          :class="{ active: selected.id == repo.id }"
+          >{{ repo.name }}</a
+        >
       </li>
     </ul>
   </div>
@@ -31,6 +39,11 @@ export default defineComponent({
   data() {
     return {
       search: ''
+    }
+  },
+  computed: {
+    reposFiltered() {
+      return this.repos.filter(repo => repo.name.toLowerCase().includes(this.search.toLowerCase()))
     }
   },
   methods: {

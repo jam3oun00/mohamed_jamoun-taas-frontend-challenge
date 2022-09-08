@@ -1,9 +1,14 @@
 <template>
   <div class="flex gap-8">
-    <gt-repositories class="min-w-[30%] ml-8 my-8" />
-    <div class="container mr-8 my-8" v-if="selectedBranch?.name">
-      <gt-branches />
-      <gt-commits />
+    <gt-repositories
+      class="min-w-[30%] ml-8 py-8"
+      @update="fetchBrabches"
+      :selected="selectedRepo"
+      :repos="repos"
+    />
+    <div class="container mr-8 py-8" v-if="selectedBranch?.name">
+      <gt-branches :branches="branches" v-model="selectedBranch" />
+      <gt-commits :commits="commits" />
     </div>
   </div>
 </template>
