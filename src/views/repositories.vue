@@ -8,7 +8,7 @@
     />
     <div class="container mr-8 py-8" v-if="selectedBranch?.name">
       <gt-branches :branches="branches" v-model="selectedBranch" />
-      <gt-commits :commits="commits" />
+      <gt-commits ref="commits" :commits="commits" @load="fetchCommits($event, true)" />
     </div>
   </div>
 </template>
@@ -39,7 +39,6 @@ export default defineComponent({
       selectedBranch: {} as Branch
     }
   },
-  // watch selectedBranch and fetch commits
   watch: {
     selectedBranch() {
       this.fetchCommits()
@@ -81,13 +80,22 @@ export default defineComponent({
         console.error(error)
       }
     },
-    async fetchCommits() {
+    async fetchCommits(
+      { page, per_page }: { page?: number; per_page?: number } = { page: 1, per_page: 10 },
+      isLoad: boolean = false
+    ) {
       try {
         const commits = await this.axios.get(
-          `${this.selectedRepo.url}/commits?sha=${this.selectedBranch.name}`,
+          `${this.selectedRepo.url}/commits?sha=${this.selectedBranch.name}&page=${page}&per_page=${per_page}`,
           this.axiosHeaders
         )
-        this.commits = commits.data
+        if (isLoad) {
+          this.commits.push(...commits.data)
+        } else {
+          this.commits = commits.data
+          // start again from page 1
+          ;(this.$refs.commits as any).reset()
+        }
       } catch (error: any) {
         if (error.response?.status === 409) {
           this.commits = []
