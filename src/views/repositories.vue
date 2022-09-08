@@ -1,13 +1,27 @@
 <template>
-  <div class="flex"></div>
+  <div class="flex gap-8">
+    <gt-repositories class="min-w-[30%] ml-8 my-8" />
+    <div class="container mr-8 my-8" v-if="selectedBranch?.name">
+      <gt-branches />
+      <gt-commits />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Repo, User, Branch, Commit } from '@/types'
+import GtRepositories from '@/components/GtRepositories.vue'
+import GtBranches from '@/components/GtBranches.vue'
+import GtCommits from '@/components/GtCommits.vue'
 
 export default defineComponent({
   name: 'repositories',
+  components: {
+    GtRepositories,
+    GtBranches,
+    GtCommits
+  },
   data() {
     return {
       repos_url: '',
@@ -56,7 +70,7 @@ export default defineComponent({
 
         this.fetchCommits()
       } catch (error: any) {
-        if (error.response.status === 409) {
+        if (error.response?.status === 409) {
           this.branches = []
         }
         console.error(error)
@@ -70,7 +84,7 @@ export default defineComponent({
         )
         this.commits = commits.data
       } catch (error: any) {
-        if (error.response.status === 409) {
+        if (error.response?.status === 409) {
           this.commits = []
         }
       }
