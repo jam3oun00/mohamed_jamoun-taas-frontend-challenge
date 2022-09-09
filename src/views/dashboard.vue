@@ -6,9 +6,17 @@
       :selected="selectedRepo"
       :repos="repos"
     />
-    <div class="container mr-8 py-8" v-if="selectedBranch?.name">
-      <gt-branches :branches="branches" v-model="selectedBranch" />
-      <gt-commits ref="commits" :commits="commits" @load="fetchCommits($event, true)" />
+    <div class="container mr-8 py-8">
+      <div class="flex justify-end">
+        <div class="flex items-center gap-3 font-semibold opacity-90" v-if="user?.avatar_url">
+          {{ user.login }}
+          <img :src="user?.avatar_url" class="h-10 w-10 object-cover rounded-full" />
+        </div>
+      </div>
+      <div v-if="selectedBranch?.name">
+        <gt-branches :branches="branches" v-model="selectedBranch" />
+        <gt-commits ref="commits" :commits="commits" @load="fetchCommits($event, true)" />
+      </div>
     </div>
   </div>
 </template>
