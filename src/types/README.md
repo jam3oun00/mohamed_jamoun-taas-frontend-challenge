@@ -1,4 +1,4 @@
-# STORE
+# TYPES
 
 This directory contains your Typescript types.
 These types are used for the data returned from Github APIs
