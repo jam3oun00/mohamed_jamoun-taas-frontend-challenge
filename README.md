@@ -12,12 +12,16 @@ yarn install
 yarn serve
 ```
 
+### Compiles and minifies for production
+
+```
+yarn build
+```
+
 ### Creating an OAuth GitHub application
 
 You can create an OAuth GitHub app on your side and update GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in the .env file.  
 Or you can stick with the existing credentials in the .env file.
-
-### Compiles and minifies for production
 
 ## Brief about the project
 
