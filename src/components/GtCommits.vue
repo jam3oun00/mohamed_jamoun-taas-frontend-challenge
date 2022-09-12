@@ -66,7 +66,7 @@ export default defineComponent({
         branch_name: this.$route.query?.branch_name,
         paginated: true
       }
-      this.page++
+      // this.page++
       this.$store.dispatch('fetchCommits', query)
     },
     reset() {

@@ -42,7 +42,9 @@ export default createStore({
       state.commitsPagination.page = 1
     },
     updateCommits(state, commits: Commit[]) {
-      if (commits && commits.length) state.commits = [...state.commits, ...commits]
+      if (commits && commits.length) {
+        state.commits = [...state.commits, ...commits]
+      }
     },
     setCommitsPagination(state, { page, perPage }) {
       if (page) state.commitsPagination.page = page
@@ -103,6 +105,10 @@ export default createStore({
       }
     },
     async fetchCommits({ commit, state }, { repo_id, branch_name, paginated = false }) {
+      paginated
+        ? commit('setCommitsPagination', { page: state.commitsPagination.page + 1 })
+        : commit('setCommitsPagination', { page: 1 })
+
       const { commitsPagination, user } = state
       const { page, perPage } = commitsPagination
       const selectedRepo = getRepoById(state.repos, repo_id)
