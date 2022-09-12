@@ -6,5 +6,4 @@ const api = axios.create({
 })
 if (accessToken) api.defaults.headers.common['Authorization'] = `bearer ${accessToken}`
 
-console.warn('api', api)
 export default api
