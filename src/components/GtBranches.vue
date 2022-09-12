@@ -7,8 +7,14 @@
         </option>
       </select>
     </div>
-    <div v-else class="flex items-center justify-center font-semibold h-[50vh]">
+    <div
+      v-else-if="$route.query?.repo_id"
+      class="flex items-center justify-center font-semibold h-[50vh]"
+    >
       No branches available to show on this repository
+    </div>
+    <div v-else class="flex items-center justify-center font-semibold h-[50vh]">
+      Select a repository to see its branches
     </div>
   </div>
 </template>
