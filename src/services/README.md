@@ -2,7 +2,7 @@
 
 This directory contains:
 
-- your main axios instance for types, use it to call the main APIs.
+- your main axios instance, use it to call the main APIs.
 - serializers helpers functions to help format the incoming data from API and return only the used fields
 
 You can create, edit and customize the serializers to adapt your API,
