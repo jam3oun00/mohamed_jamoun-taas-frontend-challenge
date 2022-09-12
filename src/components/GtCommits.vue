@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div v-if="commits && commits.length">
     <div class="commit-container my-7">
       <ul class="block">
         <li v-for="(commit, i) in commits" :key="i">
           <div class="commit-title">{{ titleTruncator(commit.commit.message) }}</div>
           <p class="commit-sub-title">{{ commit.commit.message }}</p>
           <div class="flex align-center gap-2 mt-2 text-xs">
-            <img :src="commit.author?.avatar_url" class="h-5 w-5 object-cover rounded-full" />
+            <img :src="commit.commit.author.avatar_url" class="h-5 w-5 object-cover rounded-full" />
             <span class="font-bold text-zinc-300">
-              {{ commit?.author?.login }}
+              {{ commit.commit.author.login }}
             </span>
             <span class="opacity-60">
-              committed {{ moment(commit.commit?.committer?.date).fromNow() }}
+              {{ commit.commit.committer.date }}
             </span>
           </div>
         </li>
@@ -24,24 +24,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import { Commit } from '@/types'
-import moment from 'moment'
+import { mapState } from 'vuex'
 export default defineComponent({
-  props: {
-    commits: {
-      type: Array as PropType<Commit[]>,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      moment,
-      perPage: 5,
-      currentPage: 1
-    }
-  },
   computed: {
+    ...mapState({
+      commits: (state: any): Commit[] => state.commits
+    }),
+    perPage: {
+      get() {
+        return this.$store.state.commitsPagination.perPage
+      },
+      set(perPage: number) {
+        this.$store.commit('setCommitsPagination', { perPage })
+      }
+    },
+    page: {
+      get() {
+        return this.$store.state.commitsPagination.page
+      },
+      set(page: number) {
+        this.$store.commit('setCommitsPagination', { page, perPage: this.perPage })
+      }
+    },
     titleTruncator() {
       return (title: string) => {
         const limit = 60
@@ -55,11 +61,16 @@ export default defineComponent({
   },
   methods: {
     loadMore() {
-      this.currentPage++
-      this.$emit('load', { page: this.currentPage, per_page: this.perPage })
+      const query = {
+        repo_id: this.$route.query?.repo_id,
+        branch_name: this.$route.query?.branch_name,
+        paginated: true
+      }
+      this.page++
+      this.$store.dispatch('fetchCommits', query)
     },
     reset() {
-      this.currentPage = 1
+      this.page = 1
     }
   }
 })
