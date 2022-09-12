@@ -9,27 +9,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import { Branch } from '@/types'
+import { mapState } from 'vuex'
+import { getBranchByName } from '@/services/serializers'
 
 export default defineComponent({
-  props: {
-    branches: {
-      type: Array as PropType<Branch[]>,
-      default: () => []
-    },
-    modelValue: {
-      type: Object as PropType<Branch>,
-      default: () => ({})
-    }
-  },
+  data: () => ({}),
   computed: {
+    ...mapState({
+      branches: (state: any): Branch[] => state.branches
+    }),
     selectedBranch: {
       get() {
-        return this.modelValue
+        return getBranchByName(this.branches, this.$route.query?.branch_name)
       },
       set(branch: Branch) {
-        this.$emit('update:modelValue', branch)
+        const query = { repo_id: this.$route.query?.repo_id, branch_name: branch.name }
+        this.$router.push({ query })
+        this.$store.commit('setCommitsPagination', { page: 1 })
+        this.$store.dispatch('fetchCommits', query)
       }
     }
   }
