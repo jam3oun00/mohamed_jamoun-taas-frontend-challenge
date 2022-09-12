@@ -35,7 +35,13 @@ The structure is very simple.
 We haven't chance to use these folders:
 
 - [src/assets]: project didn't require any of the assets
-- [src/store]: the project is very small and simple with only two pages, i was following the YAGNI software engineering principle
+
+#### how the data is being fomated inside the project
+
+- data being fitched from the API in vuex actions using axios
+- data being formated in same place (vuex actions) using the serializers helpers functions (read more about them in services/README.md)
+- data being stored/mutated in vuex state using the vuex mutations
+- data beaing injected in components using vuex mapState
 
 ### Technologies
 
