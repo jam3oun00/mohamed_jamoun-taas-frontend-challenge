@@ -23,7 +23,7 @@ import GtBranches from '@/components/GtBranches.vue'
 import GtCommits from '@/components/GtCommits.vue'
 import { mapState } from 'vuex'
 export default defineComponent({
-  name: 'repositories',
+  name: 'dashboard',
   components: {
     GtRepositories,
     GtBranches,

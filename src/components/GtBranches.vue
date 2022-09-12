@@ -1,10 +1,15 @@
 <template>
-  <div class="flex">
-    <select v-model="selectedBranch" class="btn primary-select">
-      <option v-for="branch in branches" :key="branch.name" :value="branch">
-        {{ branch.name }}
-      </option>
-    </select>
+  <div>
+    <div class="flex" v-if="branches && branches.length">
+      <select v-model="selectedBranch" class="btn primary-select">
+        <option v-for="branch in branches" :key="branch.name" :value="branch">
+          {{ branch.name }}
+        </option>
+      </select>
+    </div>
+    <div v-else class="flex items-center justify-center font-semibold h-[50vh]">
+      No branches available to show on this repository
+    </div>
   </div>
 </template>
 
