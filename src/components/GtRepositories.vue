@@ -14,7 +14,7 @@
         <a
           @click="selectRepo(repo)"
           class="repo-item my-2 flex gap-2 align-center"
-          :class="{ active: selected.id == repo.id }"
+          :class="{ active: selectedRepo?.id == repo.id }"
         >
           <img :src="repo.owner?.avatar_url" class="h-5 w-5 object-cover rounded-full" />
           {{ repo.name }}
@@ -25,32 +25,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import { Repo } from '@/types'
+import { mapState } from 'vuex'
+
 export default defineComponent({
-  props: {
-    repos: {
-      type: Array as PropType<Repo[]>,
-      default: () => []
-    },
-    selected: {
-      type: Object as PropType<Repo>,
-      default: () => ({})
-    }
-  },
-  data() {
-    return {
-      search: ''
-    }
-  },
+  data: () => ({
+    search: ''
+  }),
   computed: {
+    ...mapState({
+      repos: (state: any): Repo[] => state.repos
+    }),
+    selectedRepo() {
+      const id = this.$route.query?.repo_id || 0
+      return this.repos.find((repo: Repo) => String(repo.id) == id) as Repo
+    },
     reposFiltered() {
-      return this.repos.filter(repo => repo.name.toLowerCase().includes(this.search.toLowerCase()))
+      return this.repos.filter((repo: Repo) =>
+        repo.name.toLowerCase().includes(this.search.toLowerCase())
+      ) as Repo[]
     }
   },
   methods: {
     selectRepo(repo: Repo) {
-      this.$emit('update', repo)
+      this.$router.push({ query: { repo_id: repo.id } })
+      this.$store
+        .dispatch('fetchBranches', repo)
+        .then((branch_name: string) =>
+          this.$router.push({ query: { repo_id: repo.id, branch_name } })
+        )
     }
   }
 })
