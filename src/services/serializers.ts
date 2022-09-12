@@ -11,6 +11,7 @@ export const serializeRepo = (repo: Repo): Repo => {
   return {
     id: repo.id,
     name: repo.name,
+    full_name: repo.full_name,
     owner: { avatar_url: repo.owner.avatar_url, id: repo.owner.id, login: repo.owner.login }
   }
 }
@@ -33,7 +34,9 @@ export const serializeCommit = (commit: Commit): Commit => {
         name: commit.commit.committer.name
       },
       author: {
-        name: commit.commit.author.name
+        name: commit.commit.author.name,
+        avatar_url: commit.author.avatar_url,
+        login: commit.author.login
       },
       message: commit.commit.message
     }
@@ -41,10 +44,26 @@ export const serializeCommit = (commit: Commit): Commit => {
 }
 
 // multiple repos
-export const serializeRepos = (repos: Repo[]): Repo[] => repos.map(serializeRepo)
+export const serializeRepos = (repos: Repo[]): Repo[] => {
+  return repos && repos.length ? repos.map(serializeRepo) : []
+}
 
 // multiple branches
-export const serializeBranches = (branches: Branch[]): Branch[] => branches.map(serializeBranch)
+export const serializeBranches = (branches: Branch[]): Branch[] => {
+  return branches && branches.length ? branches.map(serializeBranch) : []
+}
 
 // multiple commits
-export const serializeCommits = (commits: Commit[]): Commit[] => commits.map(serializeCommit)
+export const serializeCommits = (commits: Commit[]): Commit[] => {
+  return commits && commits.length ? commits.map(serializeCommit) : []
+}
+
+// get branch by name
+export const getBranchByName = (branches: Branch[], name: any): Branch | undefined => {
+  return branches.find(branch => branch.name === name)
+}
+
+// get repo by id
+export const getRepoById = (repos: Repo[], id: any): Repo | undefined => {
+  return repos.find(repo => String(repo.id) === String(id))
+}

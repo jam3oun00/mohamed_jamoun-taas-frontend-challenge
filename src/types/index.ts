@@ -42,7 +42,7 @@ type Permission = {
 }
 
 type Repo = {
-  id?: number
+  id: number
   node_id?: string
   name: string
   full_name?: string
@@ -127,6 +127,8 @@ type Author = {
   name: string
   email?: string
   date?: Date | string
+  avatar_url?: string
+  login?: string
 }
 
 type Tree = {

@@ -1,7 +1,9 @@
-import { Store } from '@/store' // path to store file
+import { ComponentCustomProperties } from 'vue'
+import { Store } from 'vuex'
+import { state } from '@/store'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $store: Store
+    $store: Store<state>
   }
 }
