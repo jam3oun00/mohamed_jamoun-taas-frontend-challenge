@@ -42,7 +42,7 @@ export default createStore({
       state.commitsPagination.page = 1
     },
     updateCommits(state, commits: Commit[]) {
-      state.commits = [...state.commits, ...commits]
+      if (commits && commits.length) state.commits = [...state.commits, ...commits]
     },
     setCommitsPagination(state, { page, perPage }) {
       if (page) state.commitsPagination.page = page
